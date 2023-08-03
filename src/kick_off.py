@@ -4,6 +4,36 @@ from dateutil.relativedelta import relativedelta
 from config import Config as cfg
 from filelog import file_log
 from mail import __mail_notification
+from openpyxl import load_workbook
+
+
+def get_data() -> list:
+    """ Get data from the Excel worksheet and email the correct people
+
+    """
+
+    workbook = ''
+    listed_records = ''
+    site = []
+    try:
+        # Get a list of lists for sending emails
+        workbook = load_workbook(cfg.FILE)
+        sheet_names = workbook.sheetnames
+        records = []
+        for name in sheet_names:
+            worksheet = workbook[name]
+            for i in range(2, worksheet.max_row + 1):
+                for j in range(1, worksheet.max_column + 1):
+                    record = worksheet.cell(row=i, column=j)
+                    records.append(record.value)
+
+            temp = filter(lambda item: item is not None, records)
+            listed_records = list(temp)
+        for _ in range(0, len(listed_records), 3):
+            site.append(listed_records[_:_ + 3][0])
+    finally:
+        return site
+
 
 if dt.today() <= dt(int(dt.today().year), int(dt.today().month), cfg.DAYS):
     month = dt.date(dt.today() - relativedelta(months=1))
@@ -15,12 +45,21 @@ if cfg.DEBUG:
 else:
     to_who = 'overwatch@cavalry.solutions'
 
-msg_subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - {month}'
+sites = get_data()
+
+if cfg.WEEK_NUMBER:
+    msg_subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - ' \
+               f'{month.strftime("%b %Y")} - Week {cfg.WEEK_NUMBER}'
+else:
+    msg_subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - ' \
+               f'{month.strftime("%b %Y")}'
+
 msg_body= f'<html><body><p>Overwatch,<br />Patching for the ' \
-                   f'plants will be starting in 2 hours.<br /><br />' \
-                   f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
-                   f'NETWORK OPERATIONS CENTER ///<br />' \
-                   f'<a href="tel:+1 (720) 279-2233">+1 (720) 279-2233' \
-                   f'</a> - 24X7 OVERWATCH</p></body></html>'
+          f'plants will be starting for the following sites.<br />' \
+          f'{"<br />".join(map(str, sites))}<br /><br />' \
+          f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
+          f'NETWORK OPERATIONS CENTER ///<br />' \
+          f'<a href="tel:+1 (720) 279-2233">+1 (720) 279-2233' \
+          f'</a> - 24X7 OVERWATCH</p></body></html>'
 __mail_notification(to_who, msg_subj, msg_body)
 file_log('Start email sent')

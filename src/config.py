@@ -5,7 +5,7 @@ class Config:
     """ Common Variables"""
     FILE = 'site.xlsx'
     DEBUG = False
-    CHANGE_TICKET = 'CHG0046373'
+    CHANGE_TICKET = 'CHG0046418'
     WEEK_NUMBER = 3
     TIMEZONE = 'Eastern'
     DAYS = 13

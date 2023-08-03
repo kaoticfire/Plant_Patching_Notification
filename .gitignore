@@ -162,5 +162,5 @@ cython_debug/
 .vscode/
 Lib/
 Scripts/
-!/site.xlsx
-!/note.log
+!src/site.xlsx
+!src/note.log

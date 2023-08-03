@@ -80,7 +80,7 @@ def get_data(week: int, _file: str, ticket: str, current: str, sheet: str) \
             records.append(record.value)
         _notify(ticket, current, week, records, hour)
         file_log(f'Email sent for the {cfg.TIMEZONE} timezone plants. | '
-                f'Change {cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER}')
+                 f'Change {cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER}')
 
     except FileNotFoundError:
         print('No file found to process.')

@@ -8,36 +8,16 @@ from mail import __mail_notification
 from filelog import file_log
 
 
-def __notify(recipients: str, change_ticket: str, date_stamp: str,
-             week_num: int, site: str, name: str) -> tuple:
+def __all_clear(change_ticket: str, date_stamp: str,
+                week_num: int, site: list) -> None:
     if cfg.DEBUG:
         to = 'virgil.hoover@cavalry.solutions'
     else:
-        to = recipients + '; HistorianSupport@calpine.com; ' \
-                                  'brad.gibson@calpine.com; ' \
-                                  'David.Symons@calpine.com; ' \
-                                  'Laura.Morrical@calpine.com; ' \
-                                  'overwatch@cavalry.solutions'
-    if week_num:
-        subj = f'{change_ticket} - Plant Prod Monthly Patching - ' \
-                          f'{date_stamp} - Week {week_num}'
-    else:
-        subj = f'{change_ticket} - Plant Prod Monthly Patching - ' \
-                         f'{date_stamp}'
-    content = f'<html><body><p>{name},<br />All patching for the ' \
-                       f'{site} has been completed. <br /><br />Virgil Hoover' \
-                       f'<br />SUPPORT@CAVALRY.SOLUTIONS<br />NETWORK ' \
-                       f'OPERATIONS CENTER ///<br /><a href="tel:+1 (720) ' \
-                       f'279-2233">+1 (720) 279-2233</a> - 24X7 ' \
-                       f'OVERWATCH</p></body></html>'
-    return to, subj, content
-
-
-def __all_clear(change_ticket: str, date_stamp: str, week_num: int) -> tuple:
-    if cfg.DEBUG:
-        to = 'virgil.hoover@cavalry.solutions'
-    else:
-        to = 'overwatch@cavalry.solutions'
+        to = 'HistorianSupport@calpine.com; ' \
+             'brad.gibson@calpine.com; ' \
+             'David.Symons@calpine.com; ' \
+             'Laura.Morrical@calpine.com; ' \
+             'overwatch@cavalry.solutions'
 
     if week_num:
         subj = f'{change_ticket} - Plant Prod Monthly Patching - ' \
@@ -46,13 +26,14 @@ def __all_clear(change_ticket: str, date_stamp: str, week_num: int) -> tuple:
         subj = f'{change_ticket} - Plant Prod Monthly Patching - ' \
                          f'{date_stamp}'
     content= f'<html><body><p>Overwatch,<br />All patching for the ' \
-                       f'plant sites has been completed. Please resume normal' \
-                       f' monitoring for all involved sites.<br /><br />' \
-                       f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
-                       f'NETWORK OPERATIONS CENTER ///<br /><a href="tel:+1 ' \
-                       f'(720) 279-2233">+1 (720) 279-2233</a> - 24X7 ' \
-                       f'OVERWATCH</p></body></html>'
-    return to, subj, content
+             f'plant sites has been completed. Please resume normal' \
+             f' monitoring for all involved sites.<br /><br />' \
+             f'{"<br />".join(map(str, site))}<br /><br />' \
+             f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
+             f'NETWORK OPERATIONS CENTER ///<br /><a href="tel:+1 ' \
+             f'(720) 279-2233">+1 (720) 279-2233</a> - 24X7 ' \
+             f'OVERWATCH</p></body></html>'
+    __mail_notification(to, subj, content)
 
 
 def get_data(week: int, file: str, ticket: str, current: str) -> None:
@@ -65,6 +46,7 @@ def get_data(week: int, file: str, ticket: str, current: str) -> None:
     """
 
     workbook = ''
+    sites = []
     try:
         # Get a list of lists for sending emails
         workbook = load_workbook(file)
@@ -81,16 +63,12 @@ def get_data(week: int, file: str, ticket: str, current: str) -> None:
             temp = filter(lambda item: item is not None, records)
             listed_records = list(temp)
         for _ in range(0, len(listed_records), 3):
-            who, what, how = __notify(listed_records[_:_ + 3][1],
-                                      ticket, current,  week,
-                                      listed_records[_:_ + 3][0],
-                                      listed_records[_:_ + 3][2])
             file_log(f'Completion email sent for the '
                      f'{listed_records[_:_ + 3][0]}. | Change '
                      f'{cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER}')
+            sites.append(listed_records[_:_ + 3][0])
         sleep(15)
-        who, what, how = __all_clear(ticket, current, week)
-        __mail_notification(who, what, how)
+        __all_clear(ticket, current, week, sites)
 
     except FileNotFoundError:
         print('No file found to process.')
@@ -118,7 +96,7 @@ def get_data(week: int, file: str, ticket: str, current: str) -> None:
 
 
 if __name__ == '__main__':
-    # If current date is within first 10 days of the month, subtract one month
+    # If current date is within first 13 days of the month, subtract one month
     if dt.today() <= dt(int(dt.today().year), int(dt.today().month), cfg.DAYS):
         month = dt.date(dt.today() - relativedelta(months=1))
     else:

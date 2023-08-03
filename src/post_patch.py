@@ -27,7 +27,8 @@ def __all_clear(change_ticket: str, date_stamp: str,
                          f'{date_stamp}'
     content= f'<html><body><p>Overwatch,<br />All patching for the ' \
              f'plant sites has been completed. Please resume normal' \
-             f' monitoring for all involved sites.<br /><br />' \
+             f' monitoring for all involved sites. {cfg.SPOKE_TO} ' \
+             f'at the Help Desk has been notified.<br /><br />' \
              f'{"<br />".join(map(str, site))}<br /><br />' \
              f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
              f'NETWORK OPERATIONS CENTER ///<br /><a href="tel:+1 ' \
@@ -65,7 +66,8 @@ def get_data(week: int, file: str, ticket: str, current: str) -> None:
         for _ in range(0, len(listed_records), 3):
             file_log(f'Completion email sent for the '
                      f'{listed_records[_:_ + 3][0]}. | Change '
-                     f'{cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER}')
+                     f'{cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER} | '
+                     f'Spoke With {cfg.SPOKE_TO}')
             sites.append(listed_records[_:_ + 3][0])
         sleep(15)
         __all_clear(ticket, current, week, sites)

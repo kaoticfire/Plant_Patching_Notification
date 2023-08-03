@@ -43,7 +43,11 @@ else:
 if cfg.DEBUG:
     to_who = 'virgil.hoover@cavalry.solutions'
 else:
-    to_who = 'overwatch@cavalry.solutions'
+    to_who = 'HistorianSupport@calpine.com; ' \
+             'brad.gibson@calpine.com; ' \
+             'David.Symons@calpine.com; ' \
+             'Laura.Morrical@calpine.com; ' \
+             'overwatch@cavalry.solutions'
 
 sites = get_data()
 
@@ -55,11 +59,13 @@ else:
                f'{month.strftime("%b %Y")}'
 
 msg_body= f'<html><body><p>Overwatch,<br />Patching for the ' \
-          f'plants will be starting for the following sites.<br />' \
+          f'plants will be starting for the following sites. {cfg.SPOKE_TO} ' \
+          f'at the Help Desk has been notified.<br />' \
           f'{"<br />".join(map(str, sites))}<br /><br />' \
           f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
           f'NETWORK OPERATIONS CENTER ///<br />' \
           f'<a href="tel:+1 (720) 279-2233">+1 (720) 279-2233' \
           f'</a> - 24X7 OVERWATCH</p></body></html>'
 __mail_notification(to_who, msg_subj, msg_body)
-file_log('Start email sent')
+file_log(f'Change {cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER} | Month '
+         f'{month.strftime("%b %Y")} | Spoke With {cfg.SPOKE_TO}')

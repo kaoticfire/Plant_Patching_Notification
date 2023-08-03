@@ -9,6 +9,7 @@ class Config:
     WEEK_NUMBER = 3
     TIMEZONE = 'Eastern'
     DAYS = 13
+    SPOKE_TO = ''
     ZONE = {'Eastern': 'EDT',
             'Central': 'CDT',
             'Mountain': 'MDT',

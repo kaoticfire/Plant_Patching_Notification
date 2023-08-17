@@ -5,12 +5,12 @@ class Config:
     """ Common Variables"""
     FILE = 'site.xlsx'
     DEBUG = False
-    CHANGE_TICKET = 'CHG0046418'
-    WEEK_NUMBER = 3
-    TIMEZONE = 'Eastern'
+    CHANGE_TICKET = 'CHG0046567'
+    WEEK_NUMBER = 1
+    # TIMEZONE = 'Eastern'
     DAYS = 13
     SPOKE_TO = ''
-    ZONE = {'Eastern': 'EDT',
-            'Central': 'CDT',
-            'Mountain': 'MDT',
-            'Pacific': 'PDT'}
+    # ZONE = {'Eastern': 'EDT',
+    #        'Central': 'CDT',
+    #        'Mountain': 'MDT',
+    #        'Pacific': 'PDT'}

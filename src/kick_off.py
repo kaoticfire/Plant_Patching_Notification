@@ -58,9 +58,9 @@ else:
     msg_subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - ' \
                f'{month.strftime("%b %Y")}'
 
-msg_body= f'<html><body><p>Overwatch,<br />Patching for the ' \
+msg_body= f'<html><body><p>Team,<br />Patching for the ' \
           f'plants will be starting for the following sites. {cfg.SPOKE_TO} ' \
-          f'at the Help Desk has been notified.<br />' \
+          f'at the Help Desk has been notified.<br /><br />' \
           f'{"<br />".join(map(str, sites))}<br /><br />' \
           f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
           f'NETWORK OPERATIONS CENTER ///<br />' \

@@ -20,19 +20,15 @@ def get_data() -> list:
         workbook = load_workbook(cfg.FILE)
         sheet_names = workbook.sheetnames
         records = []
-        for name in sheet_names:
-            worksheet = workbook[name]
-            for i in range(2, worksheet.max_row + 1):
-                for j in range(1, worksheet.max_column + 1):
-                    record = worksheet.cell(row=i, column=j)
-                    records.append(record.value)
+        worksheet = workbook['Sites']
+        for i in range(2, worksheet.max_row + 1):
+            record = worksheet.cell(row=i, column=1)
+            site.append(record.value)
 
-            temp = filter(lambda item: item is not None, records)
-            listed_records = list(temp)
-        for _ in range(0, len(listed_records), 3):
-            site.append(listed_records[_:_ + 3][0])
+        temp = filter(lambda item: item is not None, site)
+        listed_records = list(temp)
     finally:
-        return site
+        return listed_records
 
 
 if dt.today() <= dt(int(dt.today().year), int(dt.today().month), cfg.DAYS):

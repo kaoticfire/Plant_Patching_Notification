@@ -54,21 +54,20 @@ def get_data(week: int, file: str, ticket: str, current: str) -> None:
         sheet_names = workbook.sheetnames
         records = []
         listed_records = ''
-        for name in sheet_names:
-            worksheet = workbook[name]
-            for i in range(2, worksheet.max_row + 1):
-                for j in range(1, worksheet.max_column + 1):
-                    record = worksheet.cell(row=i, column=j)
-                    records.append(record.value)
+        worksheet = workbook['Sites']
+        for i in range(2, worksheet.max_row + 1):
+            record = worksheet.cell(row=i, column=1)
+            records.append(record.value)
 
-            temp = filter(lambda item: item is not None, records)
-            listed_records = list(temp)
-        for _ in range(0, len(listed_records), 3):
+        temp = filter(lambda item: item is not None, records)
+        listed_records = list(temp)
+
+        for _ in range(0, len(listed_records)):
             file_log(f'Completion email sent for the '
-                     f'{listed_records[_:_ + 3][0]}. | Change '
+                     f'{listed_records[_]}. | Change '
                      f'{cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER} | '
                      f'Spoke With {cfg.SPOKE_TO}')
-            sites.append(listed_records[_:_ + 3][0])
+            sites.append(listed_records[_])
         sleep(15)
         __all_clear(ticket, current, week, sites)
 

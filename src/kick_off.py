@@ -55,8 +55,8 @@ else:
                f'{month.strftime("%b %Y")}'
 
 msg_body= f'<html><body><p>Team,<br />Patching for the ' \
-          f'plants will be starting for the following sites. {cfg.SPOKE_TO} ' \
-          f'at the Help Desk has been notified.<br /><br />' \
+          f'plants will be starting at 16:00 EST for the following sites. ' \
+          f'{cfg.SPOKE_TO} at the Help Desk has been notified.<br /><br />' \
           f'{"<br />".join(map(str, sites))}<br /><br />' \
           f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
           f'NETWORK OPERATIONS CENTER ///<br />' \

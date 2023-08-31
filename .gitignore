@@ -164,3 +164,7 @@ Lib/
 Scripts/
 !src/site.xlsx
 !src/note.log
+.idea/
+pyvenv.cfg
+src/note*
+src/site.xlsx

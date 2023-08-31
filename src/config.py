@@ -8,4 +8,4 @@ class Config:
     CHANGE_TICKET = 'CHG0046698'
     WEEK_NUMBER = '3'
     DAYS = 13
-    SPOKE_TO = ''
+    SPOKE_TO = 'Voicemail system'

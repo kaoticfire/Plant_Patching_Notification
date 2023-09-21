@@ -1,7 +1,6 @@
 """ Testing functionality of scripts."""
-from openpyxl import load_workbook, Workbook
+from openpyxl import load_workbook
 from os import remove
-from time import sleep
 from win32com.client import Dispatch
 
 FILTER = "[Subject] = 'test'"
@@ -9,14 +8,8 @@ FILTER = "[Subject] = 'test'"
 
 def test_excel_communication():
     """ Test I/O along with Excel functionality. """
-    _file = 'test.xlsx'
-    df = 10
-    book = Workbook()
-    sheet = book.active
-    a1 = sheet.cell(row=1, column=1)
-    a1.value = df
-    book.save(_file)
-    book.close()
+    _file = 'site.xlsx'
+    df = 'Plant'
 
     wb = load_workbook(_file)
     ws = wb['Sheet']

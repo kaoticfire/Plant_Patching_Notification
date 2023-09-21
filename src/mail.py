@@ -23,3 +23,10 @@ def __mail_notification(recipients: str, subject: str, body: str) -> None:
         print('Error: Problem sending email')
         sleep(5)
         quit()
+
+
+if __name__ == '__main__':
+    to = ''
+    subj = ''
+    msg = ''
+    __mail_notification(to, subj, msg)

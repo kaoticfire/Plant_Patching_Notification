@@ -8,12 +8,13 @@ from openpyxl import load_workbook
 
 workbook = ''
 records = []
+cycle = f'Week {int(cfg.WEEK_NUMBER) + 1}'
 try:
     workbook = load_workbook(cfg.FILE)
     worksheet = workbook.active
     for row in worksheet.iter_rows(2):
         for cell in row:
-            if cell.value == 'Week 2':
+            if cell.value == cycle:
                 records.append(worksheet.cell(row=cell.row, column=1).value)
 
 except NameError:

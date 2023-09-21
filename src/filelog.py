@@ -11,3 +11,8 @@ def file_log(message: str) -> None:
         dictConfig(safe_load(file.read()))
     logger = getLogger(getenv('UserName'))
     logger.info(message)
+
+
+if __name__ == '__main__':
+    msg = input('Enter your message: ')
+    file_log(msg)

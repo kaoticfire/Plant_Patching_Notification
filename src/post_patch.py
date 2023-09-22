@@ -7,104 +7,80 @@ from config import Config as cfg
 from mail import __mail_notification
 from filelog import file_log
 
+workbook = ''
+records = []
+cycle = f'Week {int(cfg.WEEK_NUMBER) + 1}'
+try:
+    workbook = load_workbook(cfg.FILE)
+    worksheet = workbook.active
+    for row in worksheet.iter_rows(2):
+        for cell in row:
+            if cell.value == cycle:
+                records.append(worksheet.cell(row=cell.row, column=1).value)
+except FileNotFoundError:
+    print('No file found to process.')
+    sleep(5)
+    quit()
 
-def __all_clear(change_ticket: str, date_stamp: str,
-                week_num: int, site: list) -> None:
-    if cfg.DEBUG:
-        to = 'virgil.hoover@cavalry.solutions'
-    else:
-        to = 'HistorianSupport@calpine.com; ' \
-             'brad.gibson@calpine.com; ' \
-             'David.Symons@calpine.com; ' \
-             'Laura.Morrical@calpine.com; ' \
-             'overwatch@cavalry.solutions'
+except PermissionError:
+    print('This file is locked by another process.')
+    sleep(5)
+    quit()
 
-    if week_num:
-        subj = f'{change_ticket} - Plant Prod Monthly Patching - ' \
-                          f'{date_stamp} - Week {week_num}'
-    else:
-        subj = f'{change_ticket} - Plant Prod Monthly Patching - ' \
-                         f'{date_stamp}'
-    content= f'<html><body><p>Overwatch,<br />All patching for the ' \
-             f'plant sites has been completed. Please resume normal' \
-             f' monitoring for all involved sites. {cfg.SPOKE_TO} ' \
-             f'at the Help Desk has been notified.<br /><br />' \
-             f'{"<br />".join(map(str, site))}<br /><br />' \
-             f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
-             f'NETWORK OPERATIONS CENTER ///<br /><a href="tel:+1 ' \
-             f'(720) 279-2233">+1 (720) 279-2233</a> - 24X7 ' \
-             f'OVERWATCH</p></body></html>'
-    __mail_notification(to, subj, content)
+except KeyError:
+    print('The fle has been corrupted')
+    sleep(5)
+    quit()
 
+except IOError:
+    print('The was an error trying to access the file or a portion of it.')
+    sleep(5)
+    quit()
 
-def get_data(week: int, file: str, ticket: str, current: str) -> None:
-    """ Get data from the Excel worksheet and email the correct people
+except NameError:
+    pass
 
-    week: The week number regarding the patching
-    file: The file in which to pull data from
-    ticket: The change ticket associated with the patching
-    current: the month and year for the change in MMM YYYY format
-    """
+finally:
+    workbook.close()
 
-    workbook = ''
-    sites = []
-    try:
-        # Get a list of lists for sending emails
-        workbook = load_workbook(file)
-        sheet_names = workbook.sheetnames
-        records = []
-        listed_records = ''
-        worksheet = workbook['Sites']
-        for i in range(2, worksheet.max_row + 1):
-            record = worksheet.cell(row=i, column=1)
-            records.append(record.value)
+excluded = []
+for record in records:
+    if excluded:
+        if record in excluded:
+            records.pop(record)
+            
+if dt.today() <= dt(int(dt.today().year), int(dt.today().month), cfg.DAYS):
+    month = dt.date(dt.today() - relativedelta(months=1))
+else:
+    month = dt.today()
 
-        temp = filter(lambda item: item is not None, records)
-        listed_records = list(temp)
+if cfg.DEBUG:
+    to = 'virgil.hoover@cavalry.solutions'
+else:
+    to = 'HistorianSupport@calpine.com; ' \
+         'brad.gibson@calpine.com; ' \
+         'David.Symons@calpine.com; ' \
+         'Laura.Morrical@calpine.com; ' \
+         'overwatch@cavalry.solutions'
 
-        for _ in range(0, len(listed_records)):
-            file_log(f'Completion email sent for the '
-                     f'{listed_records[_]}. | Change '
-                     f'{cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER} | '
-                     f'Spoke With {cfg.SPOKE_TO}')
-            sites.append(listed_records[_])
-        sleep(15)
-        __all_clear(ticket, current, week, sites)
+if cfg.WEEK_NUMBER:
+    subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - ' \
+                      f'{month.strftime("%b %Y")} - Week {cfg.WEEK_NUMBER}'
+else:
+    subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - ' \
+                     f'{month.strftime("%b %Y")}'
+content= f'<html><body><p>Overwatch,<br />All patching for the ' \
+         f'plant sites has been completed. Please resume normal' \
+         f' monitoring for all involved sites. {cfg.SPOKE_TO} ' \
+         f'at the Help Desk has been notified.<br /><br />' \
+         f'{"<br />".join(map(str, sorted(records)))}<br /><br />' \
+         f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
+         f'NETWORK OPERATIONS CENTER ///<br /><a href="tel:+1 ' \
+         f'(720) 279-2233">+1 (720) 279-2233</a> - 24X7 ' \
+         f'OVERWATCH</p></body></html>'
+__mail_notification(to, subj, content)
 
-    except FileNotFoundError:
-        print('No file found to process.')
-        sleep(5)
-        quit()
-
-    except PermissionError:
-        print('This file is locked by another process.')
-        sleep(5)
-        quit()
-
-    except KeyError:
-        print('The fle has been corrupted')
-        sleep(5)
-        quit()
-
-    except IOError:
-        print('The was an error trying to access the file or a portion of it.')
-        sleep(5)
-        quit()
-
-    finally:
-        workbook.close()
-
-
-
-if __name__ == '__main__':
-    # If current date is within first 13 days of the month, subtract one month
-    if dt.today() <= dt(int(dt.today().year), int(dt.today().month), cfg.DAYS):
-        month = dt.date(dt.today() - relativedelta(months=1))
-    else:
-        month = dt.today()
-
-    get_data(cfg.WEEK_NUMBER,
-             cfg.FILE,
-             cfg.CHANGE_TICKET,
-             month.strftime('%b %Y')
-             )
+for item in records:
+    file_log(f'Completion email sent for the {item}. | '
+             f'Change {cfg.CHANGE_TICKET} | Week {cfg.WEEK_NUMBER} | '
+             f'Spoke With {cfg.SPOKE_TO}')

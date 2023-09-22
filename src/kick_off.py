@@ -16,9 +16,27 @@ try:
         for cell in row:
             if cell.value == cycle:
                 records.append(worksheet.cell(row=cell.row, column=1).value)
+except FileNotFoundError:
+    print('No file found to process.')
+    quit()
+
+except PermissionError:
+    print('This file is locked by another process.')
+    quit()
+
+except KeyError:
+    print('The fle has been corrupted')
+    quit()
+
+except IOError:
+    print('The was an error trying to access the file or a portion of it.')
+    quit()
 
 except NameError:
     pass
+
+finally:
+    workbook.close()
 
 excluded = []
 for record in records:

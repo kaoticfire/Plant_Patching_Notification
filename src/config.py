@@ -3,9 +3,9 @@
 
 class Config:
     """ Common Variables"""
-    FILE = 'site.xlsx'
-    DEBUG = True
-    CHANGE_TICKET = 'CHG0046860'
-    WEEK_NUMBER = '1'
-    DAYS = 13
-    SPOKE_TO = 'Jacobe Bernard'
+    FILE = ''
+    DEBUG = ''
+    CHANGE_TICKET = ''
+    WEEK_NUMBER = ''
+    DAYS = ''
+    SPOKE_TO = ''

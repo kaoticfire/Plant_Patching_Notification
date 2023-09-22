@@ -168,3 +168,5 @@ Scripts/
 pyvenv.cfg
 src/note*
 src/site.xlsx
+!/src/conf.py
+conf.py

@@ -20,6 +20,12 @@ try:
 except NameError:
     pass
 
+excluded = []
+for record in records:
+    if excluded:
+        if record in excluded:
+            records.pop(record)
+
 if dt.today() <= dt(int(dt.today().year), int(dt.today().month), cfg.DAYS):
     month = dt.date(dt.today() - relativedelta(months=1))
 else:

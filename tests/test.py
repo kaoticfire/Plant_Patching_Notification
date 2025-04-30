@@ -24,7 +24,7 @@ def test_email_sent():
     """ Test email connection and functionality. """
     outlook = Dispatch('outlook.application')
     message = outlook.CreateItem(0)
-    message.to = 'virgil.hoover@cavalry.solutions'
+    message.to = 'someone@example.com'
     message.Subject = 'test'
     message.body = 'this is a test'
     message.Send()

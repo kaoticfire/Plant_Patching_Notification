@@ -55,13 +55,9 @@ else:
     month = dt.today()
 
 if cfg.DEBUG:
-    to = 'virgil.hoover@cavalry.solutions'
+    to = 'me@example.com'
 else:
-    to = 'HistorianSupport@calpine.com; ' \
-         'brad.gibson@calpine.com; ' \
-         'David.Symons@calpine.com; ' \
-         'Laura.Morrical@calpine.com; ' \
-         'overwatch@cavalry.solutions'
+    to = 'support@example.com'
 
 if cfg.WEEK_NUMBER:
     subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - ' \
@@ -74,10 +70,7 @@ content= f'<html><body><p>Overwatch,<br />All patching for the ' \
          f' monitoring for all involved sites. {cfg.SPOKE_TO} ' \
          f'at the Help Desk has been notified.<br /><br />' \
          f'{"<br />".join(map(str, sorted(records)))}<br /><br />' \
-         f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
-         f'NETWORK OPERATIONS CENTER ///<br /><a href="tel:+1 ' \
-         f'(720) 279-2233">+1 (720) 279-2233</a> - 24X7 ' \
-         f'OVERWATCH</p></body></html>'
+         f'SUPPORT@EXAMPLE.COM</p></body></html>'
 __mail_notification(to, subj, content)
 
 for item in records:

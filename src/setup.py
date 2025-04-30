@@ -37,7 +37,7 @@ def find_n_replace(_file: str) -> list:
 
 if __name__ == '__main__':
     DEBUG = False
-    folder = 'C:/Users/vhoover/OneDrive - Cavalry Solutions, LLC/Information/'
+    folder = 'C:/Users/getenv('Username')/OneDrive/'
     master_file = 'config.yaml'
     exit_code, message = find_n_replace(master_file)
     if exit_code:

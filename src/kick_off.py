@@ -50,13 +50,9 @@ else:
     month = dt.today()
 
 if cfg.DEBUG:
-    to_who = 'virgil.hoover@cavalry.solutions'
+    to_who = 'me@example.com'
 else:
-    to_who = 'HistorianSupport@calpine.com; ' \
-             'brad.gibson@calpine.com; ' \
-             'David.Symons@calpine.com; ' \
-             'Laura.Morrical@calpine.com; ' \
-             'overwatch@cavalry.solutions'
+    to_who = 'support@example.com'
 
 if cfg.WEEK_NUMBER:
     msg_subj = f'{cfg.CHANGE_TICKET} - Plant Prod Monthly Patching - ' \
@@ -69,10 +65,7 @@ msg_body= f'<html><body><p>Team,<br />Patching for the ' \
           f'plants will be starting at 16:00 EST for the following sites. ' \
           f'{cfg.SPOKE_TO} at the Help Desk has been notified.<br /><br />' \
           f'{"<br />".join(map(str, sorted(records)))}<br /><br />' \
-          f'Virgil Hoover<br />SUPPORT@CAVALRY.SOLUTIONS<br />' \
-          f'NETWORK OPERATIONS CENTER ///<br />' \
-          f'<a href="tel:+1 (720) 279-2233">+1 (720) 279-2233' \
-          f'</a> - 24X7 OVERWATCH</p></body></html>'
+          f'SUPPORT@EXAMPLE.COM</p></body></html>'
 
 __mail_notification(to_who, msg_subj, msg_body)
 
